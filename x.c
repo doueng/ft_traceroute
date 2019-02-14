@@ -24,6 +24,7 @@ static char	*get_error_msg(int error)
 	msg = error == SETSOCK ? "setsock failed" : msg;
 	msg = error == SOCKET ? "socket failed" : msg;
 	msg = error == USAGE ? "Usage: ./ft_ping -<vh> <host>" : msg;
+	msg = error == BIND ? "bind failed" : msg;
 	msg = error == INVALID_OPTION ? "Invaid option" : msg;
 	return (msg);
 }

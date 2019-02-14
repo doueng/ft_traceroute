@@ -27,9 +27,8 @@
 # include <errno.h>
 
 # define H_OP 0b1
-# define V_OP 0b10
 
-# define ICMP_SIZE ICMP_MINLEN
+# define DATA_SIZE 54
 
 enum
 {
@@ -41,58 +40,29 @@ enum
 	SETSOCK,
 	SOCKET,
 	USAGE,
+	BIND,
 	INVALID_OPTION
 };
-
-enum
-{
-	MIN,
-	TOTAL,
-	MAX,
-	STDDEV
-};
-
-typedef struct		s_packet
-{
-	float			triptime;
-	struct s_packet	*next;
-}					t_packet;
 
 typedef struct		s_env
 {
 	struct sockaddr	*dst_addr;
 	struct addrinfo	*addrinfo;
-	char			*arg;
+	size_t			seq;
 	int				sockfd;
 	int				options;
-	size_t			data_size;
-	uint16_t		seq;
-	size_t			packets_sent;
-	size_t			packets_recv;
-	int				sweepinc;
-	t_packet		*packets;
+	size_t			ttl;
+	int				maxhops;
 }					t_env;
 
-extern t_env		g_env;
-
-void				ft_freeaddr(void);
-void				free_packets(void);
-float				roundtrip_min(void);
-float				roundtrip_max(void);
-float				roundtrip_stddev(void);
-float				roundtrip_avg(void);
-struct icmp			*receiver(struct ip *ip_recv, struct icmp *icmp_recv);
+void				sender(t_env *env, struct icmp *icmp_send);
+struct icmp			*receiver(t_env *env, struct ip *ip_recv, struct icmp *icmp_recv);
+void				main_loop(t_env *env);
+void				ft_freeaddr(struct addrinfo *curr);
+void				create_env(t_env *env, char *address);
 char				*get_ipstr(char *ipstr, void *addr);
-void				sender(struct icmp *icmp_send);
 int					x(int res, int error);
 void				*xv(void *res, int error);
-void				sig_term(int sigid);
 uint16_t			checksum(void *b, int len);
-void				main_loop(void);
-void				create_env(char *address);
-unsigned short		checksum(void *b, int len);
-void				*x_void(void *res, char *file, int line);
-int					x_int(int res, char *file, int line);
-void				sig_alarm(int sigid);
 
 #endif

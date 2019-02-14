@@ -1,0 +1,6 @@
+*.o
+compile_commands.json
+ft_traceroute
+libft/*.a
+*.dSYM
+test/

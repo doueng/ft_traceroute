@@ -12,12 +12,10 @@
 
 #include "ft_traceroute.h"
 
-void	ft_freeaddr(void)
+void	ft_freeaddr(struct addrinfo *curr)
 {
-	struct addrinfo	*curr;
 	struct addrinfo *tmp;
 
-	curr = g_env.addrinfo;
 	while (curr)
 	{
 		tmp = curr->ai_next;

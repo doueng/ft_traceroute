@@ -12,8 +12,6 @@
 
 #include "ft_traceroute.h"
 
-t_env g_env;
-
 static int	get_options(char *op_str)
 {
 	int options;
@@ -25,8 +23,7 @@ static int	get_options(char *op_str)
 	while (*++op_str)
 	{
 		*op_str == 'h' ? options |= H_OP : 0;
-		*op_str == 'v' ? options |= V_OP : 0;
-		if (ft_strchr("hv", *op_str) == NULL)
+		if (ft_strchr("h", *op_str) == NULL)
 			x(-1, USAGE);
 	}
 	return (options);
@@ -44,22 +41,22 @@ char		*get_ipstr(char *ipstr, void *addr)
 
 int			main(int argc, char *argv[])
 {
-	char	c;
-	char	ipstr[INET_ADDRSTRLEN];
+	t_env		env;
+	char		ipstr[INET_ADDRSTRLEN + 1];
 
-	ft_bzero(&g_env, sizeof(g_env));
+	ft_bzero(&env, sizeof(env));
 	if (argc < 2)
 		x(-1, USAGE);
 	if ((*++argv)[0] == '-')
-		g_env.options = get_options(*argv++);
-	if (g_env.options & H_OP && argc < 4)
+		env.options = get_options(*argv++);
+	if (env.options & H_OP && argc < 3)
 		x(-1, USAGE);
-	if (g_env.options & H_OP)
-		g_env.sweepinc = ft_atoi(*argv++);
-	signal(SIGALRM, sig_alarm);
-	signal(SIGINT, sig_term);
-	create_env(*argv);
-	main_loop();
-	x(read(2, &c, 1), READ);
+	env.maxhops = 64;
+	if (env.options & H_OP)
+		env.maxhops = ft_atoi(*argv++);
+	create_env(&env, *argv);
+	printf("traceroute to %s (%s), %d hops max, 52 byte packets\n",
+		*argv, get_ipstr(ipstr, env.dst_addr), env.maxhops);
+	main_loop(&env);
 	return (0);
 }
