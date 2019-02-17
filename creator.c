@@ -30,7 +30,7 @@ static struct sockaddr	*get_sockaddr(t_env *env, char *address)
 	return (addrinfo->ai_addr);
 }
 
-static void				set_sockopts(t_env *env, int sockfd)
+static void				set_timeout(int sockfd)
 {
 	struct timeval	timeout;
 
@@ -39,14 +39,13 @@ static void				set_sockopts(t_env *env, int sockfd)
 	timeout.tv_usec = 0;
 	x(setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout))
 		, SETSOCK);
-	x(setsockopt(sockfd, IPPROTO_IP, IP_TTL, &env->ttl, sizeof(env->ttl))
-		, SETSOCK);
 }
 
 void					create_env(t_env *env, char *address)
 {
 	env->dst_addr = get_sockaddr(env, address);
-	env->sockfd = x(socket(AF_INET, SOCK_DGRAM, IPPROTO_ICMP), SOCKET);
-	env->ttl = 1;
-	set_sockopts(env, env->sockfd);
+	env->sockfd = x(socket(AF_INET, SOCK_RAW, IPPROTO_ICMP), SOCKET);
+	env->maxhops = 30;
+	env->packetsize = 60;
+	set_timeout(env->sockfd);
 }

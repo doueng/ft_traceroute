@@ -39,24 +39,34 @@ char		*get_ipstr(char *ipstr, void *addr)
 	return (ipstr);
 }
 
+char		*parse_args(t_env *env, int argc, char *argv[])
+{
+	if (argc < 2)
+		x(-1, USAGE);
+	if ((*++argv)[0] == '-')
+		env->options = get_options(*argv++);
+	if (env->options & H_OP && argc < 3)
+		x(-1, USAGE);
+	/* if (env.options & H_OP) */
+		/* env.maxhops = ft_atoi(*argv++); */
+	return (*argv);
+}
+
 int			main(int argc, char *argv[])
 {
 	t_env		env;
 	char		ipstr[INET_ADDRSTRLEN + 1];
+	char		*destination;
 
 	ft_bzero(&env, sizeof(env));
-	if (argc < 2)
-		x(-1, USAGE);
-	if ((*++argv)[0] == '-')
-		env.options = get_options(*argv++);
-	if (env.options & H_OP && argc < 3)
-		x(-1, USAGE);
-	env.maxhops = 64;
-	if (env.options & H_OP)
-		env.maxhops = ft_atoi(*argv++);
-	create_env(&env, *argv);
-	printf("traceroute to %s (%s), %d hops max, 52 byte packets\n",
-		*argv, get_ipstr(ipstr, env.dst_addr), env.maxhops);
+	destination = parse_args(&env, argc, argv);
+	create_env(&env, destination);
+	printf("traceroute to %s (%s), %d hops max, %u byte packets\n",
+		destination,
+		get_ipstr(ipstr, env.dst_addr),
+		env.maxhops,
+		env.packetsize);
 	main_loop(&env);
+	freeaddrinfo(env.addrinfo);
 	return (0);
 }

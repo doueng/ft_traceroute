@@ -29,6 +29,7 @@
 # define H_OP 0b1
 
 # define DATA_SIZE 54
+# define ICMP_SIZE 8
 
 enum
 {
@@ -51,8 +52,8 @@ typedef struct		s_env
 	size_t			seq;
 	int				sockfd;
 	int				options;
-	size_t			ttl;
 	int				maxhops;
+	int				packetsize;
 }					t_env;
 
 void				sender(t_env *env, struct icmp *icmp_send);

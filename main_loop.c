@@ -12,6 +12,12 @@
 
 #include "ft_traceroute.h"
 
+static void		set_ttl(int sockfd, int ttl)
+{
+	x(setsockopt(sockfd, IPPROTO_IP, IP_TTL, &ttl, sizeof(ttl))
+		, SETSOCK);
+}
+
 void			main_loop(t_env *env)
 {
 	struct icmp		icmp_send;
@@ -21,20 +27,14 @@ void			main_loop(t_env *env)
 	int				ttl;
 
 	ttl = 1;
-	sender(env, &icmp_send);
-	x(setsockopt(env->sockfd, IPPROTO_IP, IP_TTL, &ttl, sizeof(ttl))
-		, SETSOCK);
-	receiver(env, &ip_recv, &icmp_recv);
-	while (icmp_recv.icmp_type != ICMP_ECHOREPLY)
+	while (1)
 	{
-		x(setsockopt(env->sockfd, IPPROTO_IP, IP_TTL, &ttl, sizeof(ttl))
-		  , SETSOCK);
-		printf("%2d\t%s\n", ttl, get_ipstr(src_addr, &ip_recv.ip_src));
+		set_ttl(env->sockfd, ttl);
 		sender(env, &icmp_send);
 		receiver(env, &ip_recv, &icmp_recv);
+		printf("%2d\t%s\n", ttl, get_ipstr(src_addr, &ip_recv.ip_src));
 		ttl++;
-		if (ttl > env->maxhops)
-			exit(0);
+		if (ttl > env->maxhops || icmp_recv.icmp_type == ICMP_ECHOREPLY)
+			break ;
 	}
-	printf("%2d\t%s\n", ttl, get_ipstr(src_addr, &ip_recv.ip_src));
 }
