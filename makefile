@@ -1,6 +1,6 @@
 NAME = ./ft_traceroute
 LIB = ./libft/libft.a
-FLAGS = -Werror -Wextra -Wall -g
+FLAGS = -Werror -Wextra -Wall
 SRC = checksum.c \
 		creator.c \
 		ft_freeaddr.c \

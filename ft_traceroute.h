@@ -29,9 +29,6 @@
 
 # define H_OP 0b1
 
-# define DATA_SIZE 54
-# define ICMP_SIZE 8
-
 enum
 {
 	READ,

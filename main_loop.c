@@ -37,11 +37,11 @@ static void		printer(uint32_t last_src_addr,
 	char		ipstr[INET_ADDRSTRLEN + 1];
 
 	if (errno == EAGAIN)
-		printf(" * ");
+		printf("* ");
 	else
 	{
 		if (last_src_addr != curr_src_addr)
-			printf(" %s ", get_ipstr(ipstr, &curr_src_addr));
+			printf("%s ", get_ipstr(ipstr, &curr_src_addr));
 		printf(" %.3f ms ", get_triptime(send_time, recv_time));
 	}
 }

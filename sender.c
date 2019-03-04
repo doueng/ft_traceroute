@@ -28,15 +28,13 @@ void			set_udphdr(t_env *env,
 void			sender(t_env *env, struct timeval *send_time)
 {
 	uint8_t			*packet;
-	uint16_t		packet_size;
 	struct udphdr	hdr;
 
-	packet_size = sizeof(hdr) + DATA_SIZE;
-	packet = (uint8_t*)xv(ft_memalloc(packet_size), MALLOC);
-	set_udphdr(env, &hdr, packet, packet_size);
+	packet = (uint8_t*)xv(ft_memalloc(env->packetsize), MALLOC);
+	set_udphdr(env, &hdr, packet, env->packetsize);
 	x(sendto(env->sendsock,
 			packet,
-			packet_size,
+			env->packetsize,
 			0,
 			env->dst_addr,
 			sizeof(struct sockaddr_in))
