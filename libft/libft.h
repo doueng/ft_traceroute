@@ -33,6 +33,8 @@
 # define CYAN_COLOR "\x1B[36m"
 # define WHITE_COLOR "\x1B[37m"
 
+uint32_t			ft_revbytes32(uint32_t bytes);
+uint16_t			ft_revbytes16(uint16_t bytes);
 double				ft_sqrt_double(double n);
 char				*num_to_string(int num);
 void				*ft_incbyte(void *p, size_t inc_by);

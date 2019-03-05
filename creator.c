@@ -23,7 +23,8 @@ static struct sockaddr	*get_sockaddr(t_env *env, char *address)
 	addrinfo = NULL;
 	if (0 != getaddrinfo(address, NULL, &hints, &addrinfo))
 	{
-		fprintf(stderr, "traceroute: cannot resolve %s: Unknown host\n", address);
+		fprintf(stderr, "traceroute: cannot resolve %s: Unknown host\n",
+				address);
 		exit(-1);
 	}
 	env->addrinfo = addrinfo;
@@ -37,8 +38,8 @@ static void				set_timeout(int sockfd)
 	ft_bzero(&timeout, sizeof(timeout));
 	timeout.tv_sec = 1;
 	timeout.tv_usec = 0;
-	x(setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout))
-		, SETSOCK);
+	x(setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout)),
+		SETSOCK);
 }
 
 void					create_env(t_env *env, char *address)

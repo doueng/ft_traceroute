@@ -1,5 +1,4 @@
 NAME = ./ft_traceroute
-HEADER = ./ft_traceroute.h
 LIB = ./libft/libft.a
 FLAGS = -Werror -Wextra -Wall -g
 SRC = $(wildcard *.c)
@@ -8,7 +7,7 @@ SRCO = $(SRC:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(SRCO) $(HEADER)
+$(NAME): $(SRCO)
 	@make -C libft
 	gcc $(SRCO) $(LIB) -o $(NAME)
 
@@ -18,7 +17,7 @@ $(NAME): $(SRCO) $(HEADER)
 clean:
 	@/bin/rm -f $(SRCO)
 	@/bin/rm -f compile_commands.json
-	@/bin/rm -rf ft_ping.dSYM
+	@/bin/rm -rf ft_traceroute.dSYM
 	@make clean -C libft
 
 fclean: clean

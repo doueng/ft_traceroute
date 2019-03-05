@@ -52,6 +52,19 @@ char		*parse_args(t_env *env, int argc, char *argv[])
 	return (*argv);
 }
 
+void		ft_freeaddrinfo(struct addrinfo *curr)
+{
+	struct addrinfo *tmp;
+
+	while (curr)
+	{
+		tmp = curr->ai_next;
+		free(curr->ai_canonname);
+		free(curr);
+		curr = tmp;
+	}
+}
+
 int			main(int argc, char *argv[])
 {
 	t_env		env;
@@ -67,6 +80,6 @@ int			main(int argc, char *argv[])
 		env.maxhops,
 		env.packetsize);
 	main_loop(&env);
-	freeaddrinfo(env.addrinfo);
+	ft_freeaddrinfo(env.addrinfo);
 	return (0);
 }

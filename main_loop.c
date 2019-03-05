@@ -25,16 +25,24 @@ void			main_loop(t_env *env)
 	struct ip		ip_recv;
 	char			src_addr[INET_ADDRSTRLEN + 1];
 	int				ttl;
+	int				num_fails;
 
 	ttl = 1;
+	num_fails = 0;
 	while (1)
 	{
 		set_ttl(env->sockfd, ttl);
 		sender(env, &icmp_send);
 		receiver(env, &ip_recv, &icmp_recv);
-		printf("%2d\t%s\n", ttl, get_ipstr(src_addr, &ip_recv.ip_src));
-		ttl++;
-		if (ttl > env->maxhops || icmp_recv.icmp_type == ICMP_ECHOREPLY)
+		if (icmp_recv.icmp_type == ICMP_ECHOREPLY)
+			printf("%2d\t%s\n", ttl, get_ipstr(src_addr, &ip_recv.ip_src));
+		else if (num_fails < 3)
+		{
+			num_fails++;
+			printf(" * ");
+			continue ;
+		}
+		if (++ttl > env->maxhops)
 			break ;
 	}
 }
