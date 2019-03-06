@@ -12,7 +12,7 @@
 
 #include "ft_traceroute.h"
 
-char	*get_error_msg(int error)
+static char	*get_error_msg(int error)
 {
 	char *msg;
 

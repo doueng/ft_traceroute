@@ -18,7 +18,7 @@ int			main(int argc, char *argv[])
 	char		ipstr[INET_ADDRSTRLEN + 1];
 	char		*destination;
 
-	if(getuid() != 0)
+	if (getuid() != 0)
 		x(-1, ROOT);
 	ft_bzero(&env, sizeof(env));
 	destination = parse_args(&env, argc, argv);

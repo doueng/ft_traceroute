@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PING_H
-# define FT_PING_H
+#ifndef FT_TRACEROUTE_H
+# define FT_TRACEROUTE_H
 
 # include "./libft/libft.h"
 # include <sys/socket.h>

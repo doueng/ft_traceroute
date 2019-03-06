@@ -12,7 +12,7 @@
 
 #include "ft_traceroute.h"
 
-void receiver(t_env *env,
+void	receiver(t_env *env,
 			struct ip *ip_recv,
 			struct icmp *icmp_recv,
 			struct timeval *recv_time)
@@ -29,4 +29,3 @@ void receiver(t_env *env,
 	ft_memcpy(icmp_recv, buff + sizeof(*ip_recv), sizeof(*icmp_recv));
 	free(buff);
 }
-
