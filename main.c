@@ -50,7 +50,7 @@ char		*parse_args(t_env *env, int argc, char *argv[])
 	return (*argv);
 }
 
-void		ft_freeaddrinfo(struct addrinfo *curr)
+static void		ft_freeaddrinfo(struct addrinfo *curr)
 {
 	struct addrinfo *tmp;
 
@@ -69,6 +69,8 @@ int			main(int argc, char *argv[])
 	char		ipstr[INET_ADDRSTRLEN + 1];
 	char		*destination;
 
+	if(getuid() != 0)
+		x(-1, ROOT);
 	ft_bzero(&env, sizeof(env));
 	destination = parse_args(&env, argc, argv);
 	create_env(&env, destination);

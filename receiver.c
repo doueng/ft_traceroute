@@ -17,14 +17,16 @@ void receiver(t_env *env,
 			struct icmp *icmp_recv,
 			struct timeval *recv_time)
 {
-	char				buff[sizeof(struct ip) + sizeof(struct icmp)];
+	char				*buff;
 	size_t				buffsize;
 
 	buffsize = sizeof(*ip_recv) + sizeof(*icmp_recv);
+	buff = xv(ft_memalloc(buffsize), MALLOC);
 	errno = 0;
 	recvfrom(env->recvsock, buff, buffsize, MSG_WAITALL, NULL, NULL);
 	x(gettimeofday(recv_time, NULL), TIMEOFDAY);
 	ft_memcpy(ip_recv, buff, sizeof(*ip_recv));
 	ft_memcpy(icmp_recv, buff + sizeof(*ip_recv), sizeof(*icmp_recv));
+	free(buff);
 }
 

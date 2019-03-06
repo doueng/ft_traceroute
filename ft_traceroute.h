@@ -44,6 +44,7 @@ enum
 	USAGE,
 	BIND,
 	TIMEOFDAY,
+	ROOT,
 	INVALID_OPTION
 };
 

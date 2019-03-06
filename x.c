@@ -23,20 +23,21 @@ char	*get_error_msg(int error)
 	msg = error == SENDTO ? "sendto failed" : msg;
 	msg = error == SETSOCK ? "setsock failed" : msg;
 	msg = error == SOCKET ? "socket failed" : msg;
-	msg = error == USAGE ? "Usage: ./ft_traceroute [-h] destination" : msg;
 	msg = error == BIND ? "bind failed" : msg;
 	msg = error == TIMEOFDAY ? "gettimeofday failed" : msg;
+	msg = error == ROOT ? "ft_traceroute needs to be run as root" : msg;
 	msg = error == INVALID_OPTION ? "Invaid option" : msg;
 	return (msg);
 }
 
-#include <errno.h>
 int			x(int res, int error)
 {
 	if (res == -1)
 	{
-		perror(strerror(errno));
-		fprintf(stderr, "Error: %s\n", get_error_msg(error));
+		if (error == USAGE)
+			printf("Usage: ./ft_traceroute [-h] destination\n");
+		else
+			fprintf(stderr, "Error: %s\n", get_error_msg(error));
 		exit(-1);
 	}
 	return (res);

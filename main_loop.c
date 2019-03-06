@@ -80,7 +80,7 @@ void			main_loop(t_env *env)
 	{
 		set_ttl(env->sendsock, ttl++);
 		hopper(env, &icmp_recv);
-		if (icmp_recv.icmp_type == ICMP_UNREACH_PORT || ttl >= env->maxhops)
+		if (icmp_recv.icmp_type == ICMP_UNREACH_PORT || ttl > env->maxhops)
 			break ;
 	}
 }
