@@ -24,6 +24,7 @@
 # include <netinet/ip_icmp.h>
 # include <stdio.h>
 # include <sys/time.h>
+# include <netinet/udp.h>
 # include <errno.h>
 
 # define H_OP 0b1
@@ -42,6 +43,7 @@ enum
 	SOCKET,
 	USAGE,
 	BIND,
+	TIMEOFDAY,
 	INVALID_OPTION
 };
 
@@ -49,15 +51,16 @@ typedef struct		s_env
 {
 	struct sockaddr	*dst_addr;
 	struct addrinfo	*addrinfo;
-	size_t			seq;
-	int				sockfd;
+	int				sendsock;
+	int				recvsock;
 	int				options;
 	int				maxhops;
 	int				packetsize;
+	uint16_t		seq;
+	uint16_t		port;
 }					t_env;
 
-void				sender(t_env *env, struct icmp *icmp_send);
-struct icmp			*receiver(t_env *env, struct ip *ip_recv, struct icmp *icmp_recv);
+void				sender(t_env *env, struct timeval *send_time);
 void				main_loop(t_env *env);
 void				ft_freeaddr(struct addrinfo *curr);
 void				create_env(t_env *env, char *address);
@@ -65,5 +68,7 @@ char				*get_ipstr(char *ipstr, void *addr);
 int					x(int res, int error);
 void				*xv(void *res, int error);
 uint16_t			checksum(void *b, int len);
-
+void				receiver(t_env *env, struct ip *ip_recv,
+							struct icmp *icmp_recv,
+							struct timeval *recv_time);
 #endif

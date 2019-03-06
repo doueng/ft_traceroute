@@ -12,7 +12,7 @@
 
 #include "ft_traceroute.h"
 
-static char	*get_error_msg(int error)
+char	*get_error_msg(int error)
 {
 	char *msg;
 
@@ -23,16 +23,19 @@ static char	*get_error_msg(int error)
 	msg = error == SENDTO ? "sendto failed" : msg;
 	msg = error == SETSOCK ? "setsock failed" : msg;
 	msg = error == SOCKET ? "socket failed" : msg;
-	msg = error == USAGE ? "Usage: ./ft_traceroute -<h> destination" : msg;
+	msg = error == USAGE ? "Usage: ./ft_traceroute [-h] destination" : msg;
 	msg = error == BIND ? "bind failed" : msg;
+	msg = error == TIMEOFDAY ? "gettimeofday failed" : msg;
 	msg = error == INVALID_OPTION ? "Invaid option" : msg;
 	return (msg);
 }
 
+#include <errno.h>
 int			x(int res, int error)
 {
 	if (res == -1)
 	{
+		perror(strerror(errno));
 		fprintf(stderr, "Error: %s\n", get_error_msg(error));
 		exit(-1);
 	}

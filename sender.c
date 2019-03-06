@@ -12,31 +12,35 @@
 
 #include "ft_traceroute.h"
 
-static void		update_icmp_send(t_env *env, struct icmp *icmp_send)
+void			set_udphdr(t_env *env,
+						struct udphdr *hdr,
+						uint8_t *packet,
+						size_t packet_size)
 {
-	ft_bzero(icmp_send, sizeof(*icmp_send));
-	icmp_send->icmp_type = ICMP_ECHO;
-	icmp_send->icmp_code = 0;
-	icmp_send->icmp_seq = ft_revbytes16(env->seq++);
-	icmp_send->icmp_cksum = 0;
-	icmp_send->icmp_cksum = checksum(icmp_send, sizeof(struct icmp));
+	hdr->source = htons(100);
+	hdr->dest = htons(env->port++);
+	hdr->len = htons(packet_size);
+	hdr->check = 0;
+	ft_memcpy(packet, hdr, sizeof(*hdr));
+	hdr->check = checksum(packet, packet_size);
 }
 
-void			sender(t_env *env, struct icmp *icmp_send)
+void			sender(t_env *env, struct timeval *send_time)
 {
-	uint8_t	*packet;
-	size_t	packet_size;
+	uint8_t			*packet;
+	uint16_t		packet_size;
+	struct udphdr	hdr;
 
-	update_icmp_send(env, icmp_send);
-	packet_size = ICMP_SIZE + DATA_SIZE;
+	packet_size = sizeof(hdr) + DATA_SIZE;
 	packet = (uint8_t*)xv(ft_memalloc(packet_size), MALLOC);
-	ft_memcpy(packet, icmp_send, ICMP_SIZE);
-	x(sendto(env->sockfd,
+	set_udphdr(env, &hdr, packet, packet_size);
+	x(sendto(env->sendsock,
 			packet,
 			packet_size,
 			0,
 			env->dst_addr,
 			sizeof(struct sockaddr_in))
 		, SENDTO);
+	x(gettimeofday(send_time, NULL), TIMEOFDAY);
 	free(packet);
 }

@@ -45,10 +45,8 @@ char		*parse_args(t_env *env, int argc, char *argv[])
 		x(-1, USAGE);
 	if ((*++argv)[0] == '-')
 		env->options = get_options(*argv++);
-	if (env->options & H_OP && argc < 3)
+	if (env->options & H_OP)
 		x(-1, USAGE);
-	/* if (env.options & H_OP) */
-		/* env.maxhops = ft_atoi(*argv++); */
 	return (*argv);
 }
 
@@ -76,7 +74,7 @@ int			main(int argc, char *argv[])
 	create_env(&env, destination);
 	printf("traceroute to %s (%s), %d hops max, %u byte packets\n",
 		destination,
-		get_ipstr(ipstr, env.dst_addr),
+		get_ipstr(ipstr, &((struct sockaddr_in*)env.dst_addr)->sin_addr),
 		env.maxhops,
 		env.packetsize);
 	main_loop(&env);
