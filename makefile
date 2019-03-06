@@ -1,7 +1,16 @@
 NAME = ./ft_traceroute
 LIB = ./libft/libft.a
 FLAGS = -Werror -Wextra -Wall -g
-SRC = $(wildcard *.c)
+SRC = checksum.c \
+		creator.c \
+		ft_freeaddr.c \
+		get_ipstr.c \
+		main.c \
+		main_loop.c \
+		parse_args.c \
+		receiver.c \
+		sender.c \
+		x.c
 
 SRCO = $(SRC:.c=.o)
 

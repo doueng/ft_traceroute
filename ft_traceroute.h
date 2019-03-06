@@ -61,9 +61,11 @@ typedef struct		s_env
 	uint16_t		port;
 }					t_env;
 
+void				ft_freeaddrinfo(struct addrinfo *curr);
+char				*get_ipstr(char *ipstr, void *addr);
+char				*parse_args(t_env *env, int argc, char *argv[]);
 void				sender(t_env *env, struct timeval *send_time);
 void				main_loop(t_env *env);
-void				ft_freeaddr(struct addrinfo *curr);
 void				create_env(t_env *env, char *address);
 char				*get_ipstr(char *ipstr, void *addr);
 int					x(int res, int error);

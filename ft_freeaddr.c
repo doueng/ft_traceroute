@@ -12,7 +12,7 @@
 
 #include "ft_traceroute.h"
 
-void	ft_freeaddr(struct addrinfo *curr)
+void	ft_freeaddrinfo(struct addrinfo *curr)
 {
 	struct addrinfo *tmp;
 
